@@ -34,6 +34,18 @@ export default Server(
             res.json({ greeting: `Hello, ${req.query.name}` });
         });
 
+        app.get('/generate-identity', async (req, res) => {
+            ic.setOutgoingHttpOptions({
+                maxResponseBytes: 20_000n,
+                cycles: 500_000_000_000n,
+                transformMethodName: 'transform'
+            })
+
+            const response = await fetch('https://randomuser.me/api/');
+            const responseJson = await response.json();
+            res.json(responseJson);
+        })
+
         app.post('/price-oracle', async (req, res) => {
             ic.setOutgoingHttpOptions({
                 maxResponseBytes: 20_000n,
