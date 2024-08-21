@@ -34,22 +34,22 @@ export default Server(
             res.json({ greeting: `Hello, ${req.query.name}` });
         });
 
-        app.post('/generate-identity', async (req, res) => {
+        app.post('/guess-nationality', async (req, res) => {
             ic.setOutgoingHttpOptions({
-                maxResponseBytes: 20_000n,
-                cycles: 500_000_000_000n,
+                maxResponseBytes: 10_000n,
+                cycles: 2_000_000_000_000n,
                 transformMethodName: 'transform'
             })
 
-            const response = await fetch('https://randomuser.me/api/');
+            const response = await fetch(`https://api.nationalize.io/?name=${req.body.name}`);
             const responseJson = await response.json();
             res.json(responseJson);
         })
 
         app.post('/price-oracle', async (req, res) => {
             ic.setOutgoingHttpOptions({
-                maxResponseBytes: 20_000n,
-                cycles: 500_000_000_000n, // HTTP outcalls cost cycles. Unused cycles are returned.
+                maxResponseBytes: 10_000n,
+                cycles: 2_000_000_000_000n, // HTTP outcalls cost cycles. Unused cycles are returned.
                 transformMethodName: 'transform'
             });
 
