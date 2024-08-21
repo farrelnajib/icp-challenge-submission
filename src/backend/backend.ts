@@ -34,7 +34,7 @@ export default Server(
             res.json({ greeting: `Hello, ${req.query.name}` });
         });
 
-        app.get('/generate-identity', async (req, res) => {
+        app.post('/generate-identity', async (req, res) => {
             ic.setOutgoingHttpOptions({
                 maxResponseBytes: 20_000n,
                 cycles: 500_000_000_000n,

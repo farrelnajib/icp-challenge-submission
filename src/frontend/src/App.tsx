@@ -1,8 +1,25 @@
 import { useState } from 'react';
 
+type IdentityResponse = {
+  results: [IdentityResult]
+}
+
+type IdentityResult = {
+  name: {
+    title: String,
+    first: String,
+    last: String,
+  },
+  gender: String,
+  email: String,
+  dob: {
+    age: Number
+  },
+}
+
 function App() {
   const [greeting, setGreeting] = useState('');
-  const [identity, setIdentity] = useState(undefined);
+  const [identity, setIdentity] = useState<IdentityResponse>();
 
   function handleSubmit(event: any) {
     event.preventDefault();
@@ -15,9 +32,11 @@ function App() {
 
   function generateRandom(event: any) {
     event.preventDefault();
-    fetch(`${import.meta.env.VITE_CANISTER_URL}/generate-identity`)
+    fetch(`${import.meta.env.VITE_CANISTER_URL}/generate-identity`, {
+      method: "POST"
+    })
       .then(response => response.json()).then((json) => {
-        setIdentity(json);
+        setIdentity(json as IdentityResponse);
       });
   }
 
@@ -39,7 +58,7 @@ function App() {
         <table border={1}>
           <tr>
             <td>Name</td>
-            <td>{identity.results[0].name}</td>
+            <td>{identity.results[0].name.title} {identity.results[0].name.first} {identity.results[0].name.last}</td>
           </tr>
           <tr>
             <td>Gender</td>
@@ -51,7 +70,7 @@ function App() {
           </tr>
           <tr>
             <td>Age</td>
-            <td>{identity.results[0].dob.age}</td>
+            <td>{identity.results[0].dob.age.toString()}</td>
           </tr>
         </table>
       )}
